@@ -10,11 +10,8 @@ use Lcobucci\JWT\Configuration;
 
 final class JwtTokenGenerator implements TokenGeneratorInterface
 {
-    /** @var Configuration */
-    private $configuration;
-
-    /** @var int */
-    private $ttl;
+    private Configuration $configuration;
+    private int $ttl;
 
     public function __construct(Configuration $configuration, int $ttl)
     {
@@ -27,8 +24,8 @@ final class JwtTokenGenerator implements TokenGeneratorInterface
         $now = new DateTimeImmutable();
 
         $token = $this->configuration->builder()
-            ->issuedBy('php-ddd-base')
-            ->permittedFor('php-ddd-base')
+            ->issuedBy('mis-comercios')
+            ->permittedFor('mis-comercios')
             ->relatedTo($subjectId)
             ->issuedAt($now)
             ->canOnlyBeUsedAfter($now)
