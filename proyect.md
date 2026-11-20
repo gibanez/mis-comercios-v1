@@ -7,15 +7,14 @@
 
 ## Identidad
 
-- **Nombre:** php-ddd-base
-- **Descripción:** base/MVP de backend PHP 7.4 + Slim 4 + DDD liviano, con CMS (login + CRUD de páginas) y sitio público (home / about / contact).
-- **Estado:** prototipo funcional (se usa como plantilla para forks).
-- **Repositorio:** https://github.com/gibanez/php-ddd-base (público)
+- **Nombre:** mis-comercios
+- **Descripción:** Backend PHP 8.2 + Slim 4 + DDD liviano + MySQL 8. Base con Auth, Admin, Page e Inquiry; a extender con los módulos propios del proyecto.
+- **Estado:** en desarrollo.
 
 ## Stack
 
-- **PHP:** objetivo 7.4 (`config.platform` en `composer.json`); probado localmente en PHP 8.5.
-- **Base de datos:** SQLite (`storage/database.sqlite`), migrada con Phinx.
+- **PHP:** 8.2 (`config.platform` en `composer.json`).
+- **Base de datos:** MySQL 8 (`mis_comercios`), migrada con Phinx.
 - **Frontends:** HTML + CSS + JS sin build (sitio en `public/`, CMS en `public/admin/`).
 - **Hosting / deploy:** `php -S localhost:9980 -t public` para desarrollo; Apache con `public/.htaccess` para producción.
 
@@ -40,17 +39,19 @@ Rutas de salud: `GET /api/ping`.
 
 ## Frontends / apps
 
-- **Sitio** (`src/Apps/Site/Infrastructure/Views`): `home.html`, `about.html`, `contact.html`, servidos por `SiteController`. Home carga `GET /api/public/pages/home`; el contacto hace `POST /api/inquiries`.
-- **CMS** (`public/admin/`): página estática con `admin.js`. Login, listado, alta/edición y borrado de páginas.
-- Assets del sitio en `public/assets/` (`site.css`, `site.js`).
+- **Sitio** (`public/`): Vue 3 + Tailwind CSS. SPA o multi-página según evolución del proyecto. Consume la API pública (`/api/public/...`).
+- **CMS** (`public/admin/`): Vue 3 + PrimeVue. Panel de administración con login JWT, listados con DataTable de Prime y formularios en diálogos/modales de Prime. Consume la API protegida (`Authorization: Bearer …`).
+- Ambos frontends se buildean con Vite y el output va a `public/` y `public/admin/` respectivamente.
 
 ## Base de datos y migraciones propias
 
+- Motor: MySQL 8, charset `utf8mb4`, collation `utf8mb4_unicode_ci`.
 - `admins`: `id` (UUID), `name`, `email` único, `password_hash`, `status`.
 - `pages`: `id` (UUID), `slug` único, `title`, `body`, `status`.
 - `inquiries`: `id` (UUID), `name`, `email`, `message`, `created_at`.
 - Semillas: un admin de desarrollo y las páginas `home`, `about`, `contact`.
 - Comandos: `vendor/bin/phinx migrate`, `vendor/bin/phinx rollback`, `vendor/bin/phinx status`.
+- Crear la base antes de migrar: `CREATE DATABASE IF NOT EXISTS mis_comercios CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;`
 
 ## Decisiones y patrones propios
 
@@ -70,11 +71,11 @@ Rutas de salud: `GET /api/ping`.
 ## Gotchas
 
 - `lcobucci/jwt 4.3`: `ValidAt` recibe un `Lcobucci\Clock\Clock`, no un `DateTimeImmutable`; usar `new ValidAt(SystemClock::fromUTC())`.
-- En el PHP local de esta máquina falta `ext-zip`: Composer cae a clonar cada paquete (lento). Correr `php -d extension=zip C:\composer\composer.phar install` o habilitar `extension=zip` en el `php.ini`.
 - `php -S` no lee `.htaccess`: las rutas caen al `index.php` por el fallback del servidor embebido.
 - El sitio vive en `public/`; el CMS en `public/admin/`. No moverlos sin ajustar las rutas de los assets.
 - `APP_DEBUG=true` muestra el detalle de las excepciones: apagarlo en producción.
 - Si se cambia el usuario semilla, actualizar también la leyenda del login del CMS.
+- MySQL debe estar corriendo y la base `mis_comercios` creada antes de correr `phinx migrate`.
 
 ## Pendientes
 

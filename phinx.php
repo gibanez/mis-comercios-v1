@@ -6,27 +6,21 @@ use Gaby\Shared\Config\Env;
 
 require __DIR__ . '/vendor/autoload.php';
 
-$dbPath = Env::get('DB_PATH', 'storage/database.sqlite');
-
-if ($dbPath === null || $dbPath === '') {
-    $dbPath = 'storage/database.sqlite';
-}
-
-if (!preg_match('#^(?:[A-Za-z]:[\\\\/]|[\\\\/])#', $dbPath)) {
-    $dbPath = __DIR__ . DIRECTORY_SEPARATOR . ltrim($dbPath, '/\\');
-}
-
 return [
     'paths' => [
         'migrations' => __DIR__ . DIRECTORY_SEPARATOR . 'database' . DIRECTORY_SEPARATOR . 'migrations',
     ],
     'environments' => [
         'default_migration_table' => 'phinxlog',
-        'default_environment' => 'development',
+        'default_environment'     => 'development',
         'development' => [
-            'adapter' => 'sqlite',
-            'name' => $dbPath,
-            'suffix' => '',
+            'adapter' => 'mysql',
+            'host'    => Env::get('DB_HOST', '127.0.0.1'),
+            'port'    => (int) (Env::get('DB_PORT', '3306') ?? '3306'),
+            'name'    => Env::get('DB_NAME', 'mis_comercios'),
+            'user'    => Env::get('DB_USER', 'root'),
+            'pass'    => Env::get('DB_PASS', '') ?? '',
+            'charset' => 'utf8mb4',
         ],
     ],
 ];

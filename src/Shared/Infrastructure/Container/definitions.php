@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-use Gaby\Shared\Persistence\SqliteConnection;
+use Gaby\Shared\Persistence\MysqlConnection;
 use Nyholm\Psr7\Factory\Psr17Factory;
 use Psr\Http\Message\ResponseFactoryInterface;
 use function DI\factory;
 
 return [
     \PDO::class => factory(function (): \PDO {
-        return SqliteConnection::create();
+        return MysqlConnection::create();
     }),
     ResponseFactoryInterface::class => factory(function (): ResponseFactoryInterface {
         return new Psr17Factory();

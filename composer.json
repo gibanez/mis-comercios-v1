@@ -1,11 +1,11 @@
 {
-    "name": "gaby/php-ddd-base",
-    "description": "Base PHP 7.4 + Slim 4 + DDD liviano (API, CMS y sitio)",
+    "name": "gaby/mis-comercios",
+    "description": "mis-comercios v1 — backend PHP 8.2 + Slim 4 + DDD liviano + MySQL 8",
     "type": "project",
     "license": "MIT",
     "require": {
-        "php": "^7.4",
-        "lcobucci/jwt": "^4.1",
+        "php": "^8.2",
+        "lcobucci/jwt": "^5.0",
         "nyholm/psr7": "^1.5",
         "nyholm/psr7-server": "^1.0",
         "php-di/php-di": "^6.4",
@@ -14,7 +14,7 @@
         "slim/slim": "^4"
     },
     "require-dev": {
-        "pestphp/pest": "^1.23"
+        "pestphp/pest": "^2.0"
     },
     "autoload": {
         "psr-4": {
@@ -28,7 +28,7 @@
     },
     "config": {
         "platform": {
-            "php": "7.4.33",
+            "php": "8.2.0",
             "ext-sodium": "1.0"
         },
         "allow-plugins": {
